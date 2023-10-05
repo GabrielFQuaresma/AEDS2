@@ -12,7 +12,7 @@ typedef struct S_Queue{
     int maxSize;
 
     void (*insert)(int number, struct S_Queue*);
-    void (*remove)(struct S_Queue*);
+    int (*remove)(struct S_Queue*);
 
     void (*show)(struct S_Queue);
     void (*close)(struct S_Queue*);
