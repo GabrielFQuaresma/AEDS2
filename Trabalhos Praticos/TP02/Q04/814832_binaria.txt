@@ -1,0 +1,1 @@
+Matrícula: 814832	Tempo de execução: 0.000032s	Número de comparações: 3	Número de movimentações: 1
