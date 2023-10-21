@@ -647,7 +647,7 @@ int main ()
 
     while(strcmp(line, "FIM"))
     {
-        Jogador tmp = readJogador(atoi(line), "w/tmp/players.csv");
+        Jogador tmp = readJogador(atoi(line), "/tmp/players.csv");
         queue.insert(tmp, &queue);
         scanf("%s", line);
         getchar();
