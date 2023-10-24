@@ -638,33 +638,48 @@ void countingSort( Queue *queue, Resultado* resultado)
     queue->array = exitQueue.array;
 }
 
-// Função para realizar a classificação Radix
-void radixSort(Queue* queue, Resultado* resultado) {
+void radcountingSort(int n, int exp, Queue* queue, Resultado* resultado)
+{
+    int count[10];
+    Jogador output[n];
+
     Jogador* array = queue->array;
-    int size = queue->size;
-    int maxValue = array[0].id;
 
-    
-    for (int exp = 1; maxValue / exp > 0; exp *= 10) {
-        Queue exitQueue = newQueue(size); 
-        int count[10] = {0}; 
+    for (int i = 0; i < 10; count[i] = 0, i++);
 
-        for (int i = 0; i < size; i++) {
-            count[(array[i].id / exp) % 10]++;
-        }
+    for (int i = 0; i < n; i++)
+    {
+        count[(array[i].id / exp) % 10]++;
+    }
 
-        for (int i = 1; i < 10; i++) {
-            count[i] += count[i - 1];
-        }
+    for (int i = 1; i < 10; i++)
+    {
+        count[i] += count[i - 1];
+    }
 
-        for (int i = size - 1; i >= 0; i--) {
-            int position = (array[i].id / exp) % 10;
-            exitQueue.array[--count[position]] = array[i];
+    for (int i = n - 1; i >= 0; i--)
+    {
+        output[count[(array[i].id / exp) % 10] - 1] = array[i];
+        count[(array[i].id / exp) % 10]--;
+        resultado->movimentacoes++;
+    }
 
-            resultado->movimentacoes++;
-        }
+    for (int i = 0; i < n; i++)
+    {
+        array[i] = output[i];
+    }
+}
 
-        queue->array = exitQueue.array;
+
+void radixSort(Queue* queue, Resultado* resultado)
+{
+
+    int maxValue = queue->array[0].id;
+    for(int i = 1; i < queue->size; i++) maxValue = (maxValue < queue->array[i].id) ? queue->array[i].id : maxValue;
+
+    for (int exp = 1; maxValue / exp > 0; exp *= 10)
+    {
+        radcountingSort(queue, queue->size, exp, resultado);
     }
 }
 
