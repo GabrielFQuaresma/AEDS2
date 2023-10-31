@@ -180,6 +180,7 @@ public class PlayerList{
                 System.out.println(e.getMessage());
             }
         }
+        sc.close();
         return playerlist;
     }
 

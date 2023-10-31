@@ -172,6 +172,7 @@ public class Player {
             tmp = new Player(tmpId, name, height, weight, university, birthYear, birthCity, birthState);
 
         }
+        sc.close();
         return tmp;
     }
 
