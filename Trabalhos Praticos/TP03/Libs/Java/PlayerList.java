@@ -147,6 +147,14 @@ public class PlayerList{
         }
     }
 
+    public void showPosition()
+    {
+        for(int i = 0; i < size; i++)
+        {
+            System.out.println("[" + i + "] " + array[i]);
+        }
+    }
+
 
     private static void swap(Player[] array, int i, int j) 
     {

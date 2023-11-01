@@ -104,6 +104,11 @@ public class Player {
         return (new Player(this.id, this.name, this.height, this.weight, this.university, this.birthYear, this.birthCity, this.birthState));
     }
 
+    @Override
+    public String toString(){
+        return "## " + name + " ## " + height + " ## " +  weight + " ## " + birthYear + " ## " + university + " ## " +  birthCity + " ## " + birthState + " ##"; 
+    }
+
     public static void print(Player tmp) {
         System.out.print("[" + tmp.id + " ## ");
         System.out.print(tmp.name + " ## ");
