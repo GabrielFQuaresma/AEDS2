@@ -17,6 +17,12 @@
 typedef char* String;
 typedef const char* literal;
 
+typedef struct Split
+{
+    char array[MAX_ATTRIBUTES][MAX_SIZE_STR];
+}Split;
+
+
 String* splitFile(int attributes, FILE* file)
 {
     
@@ -45,30 +51,16 @@ String* splitFile(int attributes, FILE* file)
     return str;
 }
 
-char** splitSpace() {
-    char** str = (char**)malloc(8 * sizeof(char*));
+Split splitSpace() {
 
-    if (str) {
-        char line[MAX_SIZE_STR];
-        fgets(line, sizeof(line), stdin);
-        
-        char* token = strtok(line, " \n");
-        int i = 0;
-        
-        while (token != NULL && i < 3) {
-            str[i] = strdup(token);
-            token = strtok(NULL, " \n");
-            i++;
-        }
-        
-        // Limpeza de memória não usada (se necessário)
-        while (i < 3) {
-            str[i] = NULL;
-            i++;
-        }
-    }
+	Split split;
 
-    return str;
+	for (int i = 0; i < 3; i++) {
+		scanf("%[^ \n]", split.array[i]);
+		if (getchar() == '\n') i = 3;
+	}
+
+	return split;
 }
 
 String nextSpace(String line)
