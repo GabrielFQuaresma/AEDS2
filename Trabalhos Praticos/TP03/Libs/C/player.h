@@ -182,6 +182,12 @@ void printPlayer(Player player)
     printf("## %s ## %s ## %s]\n", player.university, player.birthCity, player.birthState);
 }
 
+void NoIDPrintPlayer(Player player)
+{
+    printf(" ## %s ## %d ## %d ## %d ", player.name, player.height, player.weight, player.birthYear);
+    printf("## %s ## %s ## %s ##\n", player.university, player.birthCity, player.birthState);
+}
+
 Player readPlayer(int id, String filePath)
 {
     FILE* DB;
