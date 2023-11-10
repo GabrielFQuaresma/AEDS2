@@ -158,6 +158,15 @@ void showList(PlayerList list)
     }
 }
 
+void showNoIDList(PlayerList list)
+{
+    for(int i = 0; i < list.size; i++)
+    {
+        printf("[%d]", i);
+        NoIDPrintPlayer(list.array[i]);
+    }
+}
+
 void showPartialList(int k, PlayerList list)
 {
     for(int i = 0; i < k; i++)
