@@ -7,7 +7,7 @@
 #include <time.h>
 #include <math.h>
 
-#include "Celulas/Cell.h"++++++
+#include "Celulas/Cell.h"
 #include "libs.h"
 
 //DEFINIÇÕES
@@ -90,11 +90,8 @@ PlayerCFQueue newList(size_t maxSize)
     PlayerCFQueue queue;
 
     queue.first = newCellEmpty();
-    queue.last = queue.first;
-
-    if (maxSize == 0) maxSize = 80;
-
-    queue.array = (Player*)(malloc(maxSize * sizeof(Player)));
+    queue.last = queue.first; 
+    
     queue.size = 0;
 
     queue.insert = Insert;
