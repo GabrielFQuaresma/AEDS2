@@ -1,0 +1,251 @@
+//INCLUSÕES
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#include <time.h>
+#include <math.h>
+
+#include "Celulas/DualCell.h"
+#include "player.h"
+
+//DEFINIÇÕES
+#define INT_MAX 2147483647
+#define MAX_ATTRIBUTES 8
+#define MAX_SIZE_STR 400
+#define e 2.718281828
+
+typedef char* String;
+typedef const char* literal;
+
+/*
+
+    Lista Linear de playeres
+
+*/
+
+typedef struct S_List{
+    DualCell* first;
+    DualCell* last;
+    int size;
+    int maxSize;
+
+    void (*insert)(int position, Player player, struct S_List*);
+    void (*insertStart)(Player player, struct S_List*);
+    void (*insertEnd)(Player player, struct S_List*);
+    
+    Player (*remove)(int position, struct S_List*);
+    Player (*removeStart)(struct S_List*);
+    Player (*removeEnd)(struct S_List*);
+    
+    void (*show)(struct S_List);
+    void (*close)(struct S_List*);
+} PlayerList;
+
+
+
+/**
+    Método de inserção de um player no inicio do array, com custo de theta de (n).
+    @param player - Player que será inserido na lista.
+    @param list - Lista que será inserido o numero
+*/
+void beginningInsertList(Player player, PlayerList* list)
+{
+    if(list->maxSize > 0){
+        if(list->size < list->maxSize){
+            list->size++;
+            DualCell* tmp = newCellFull(player, list->first, list->first->next);
+            list->first->next = tmp;
+        }
+    }
+}
+
+/**
+    Método de inserção de um player no fim do array, com custo de theta de (1).
+    @param player - Player que será inserido na lista.
+    @param list - Lista que será inserido o numero
+*/
+void endInsertList(Player player, PlayerList* list)
+{
+    if(list->maxSize > 0){
+        if(list->size < list->maxSize){
+            DualCell* tmp = newCell(player);
+            tmp->prior = list->last;
+            list->last->next = tmp;
+            list->last = list->last->next;
+
+            list->size++;
+        }
+    }
+}
+
+
+
+/**
+    Método de inserção de um player em qualquer posicao do array, com custo de theta de (n).
+    @param player - Player que será inserido na lista.
+    @param list - Lista que será inserido o numero
+    @param position - Posição que o player sera inserido
+*/
+void InsertList(int position, Player player, PlayerList* list)
+{
+    if(list->maxSize < 0 || list->size == list->maxSize){
+        printf("Insercao em qualquer posicao incorreta");
+        exit(-1);
+    }
+
+    if(position == 0) beginningInsertList(player, list);
+    else if(position > list->size) endInsertList(player, list);
+    else{
+        list->size++;
+        DualCell* index = list->first;
+        
+        for(int i = 0; i > position; i++) index = index->next;
+
+        DualCell* tmp = newCellFull(player, index, index->next);
+        index->next->prior = tmp;
+        index->next = tmp;
+    }
+}
+
+/**
+    Método de remoção de um Player no inicio do array, com custo de theta de (n), devido ao shift dos elementos.
+    @param list - Lista em que o Player sera removido
+    @return Caso a lista tenha Player pra ser removido, retornará o Player removido. Caso contrário, será retornado o valor máximo de um inteiro
+*/
+Player beginningRemoveList(PlayerList* list)
+{
+    Player removed = newPlayer();
+    if(list->size > 0)
+    {
+        removed = list->first->next->player;
+        list->first->next = list->first->next->next;
+        list->size--;
+        
+    }
+    return removed;
+}
+
+Player endRemoveList(PlayerList* list)
+{
+    Player removed = newPlayer();
+    if(list->size > 0){
+        removed = list->last->player;
+        removed = list->first->next
+    }
+    return removed;
+}
+
+Player removeList(int position, PlayerList* list)
+{
+    if(list->size <= 0 || position < 0 || position > list->size ){
+            printf("Erro: Removendo incorretamente");
+            exit(-1);
+    }
+
+    Player removed = list->array[position];
+    list->size--;
+
+    for(int i = position; i < list->size; i++) list->array[i] = list->array[i + 1];
+    
+    return removed;
+}
+
+
+/**
+    Método de mostragem dos playeres dentro da lista, com custo de theta de (N)
+*/
+void showList(PlayerList list)
+{
+    for(int i = 0; i < list.size; i++)
+    {
+        printPlayer(list.array[i]);
+    }
+}
+
+void showNoIDList(PlayerList list)
+{
+    for(int i = 0; i < list.size; i++)
+    {
+        printf("[%d]", i);
+        NoIDPrintPlayer(list.array[i]);
+    }
+}
+
+void showPartialList(int k, PlayerList list)
+{
+    for(int i = 0; i < k; i++)
+    {
+        printPlayer(list.array[i]);
+    }
+}
+
+
+/**
+    Método para limpar a memória da lista
+    @param list - Lista que será limpa
+*/
+void closeList(PlayerList* list)
+{
+    free(list->array);
+    list->array = NULL;
+    list->maxSize = 0;
+    list->size = 0;
+}
+
+
+/**
+    Método para ler um base da dados e inserir na lista
+    @param filePath - Caminho do arquivo.
+    @param list - Lista que será lida.
+*/
+void readDataBase(String filePath, PlayerList* list)
+{
+    FILE* DB;
+    if(!(DB = fopen(filePath, "r"))){
+        printf("Erro: Falha ao abrir base de dados");
+        exit(0);
+    }
+    //fseek(DB, 60, SEEK_SET);
+
+    while(list->size < list->maxSize && !feof(DB))
+    {
+        String* line = splitFile(8, DB);
+        
+        Player tmp = newPlayerByStrings(line);
+        list->insertEnd(tmp, list);
+    }
+    
+}
+
+/**
+    Método para criação de uma lista
+    @param maxSize - número que dira o tamanho da lista
+    @return retorna a Lista
+*/
+PlayerList newList(size_t maxSize)
+{
+
+    PlayerList list;
+
+    if (maxSize == 0) maxSize = 80;
+
+    list.array = (Player*)(malloc(maxSize * sizeof(Player)));
+    list.size = 0;
+    list.maxSize = maxSize;
+
+    list.insert = InsertList;
+    list.insertStart = beginningInsertList;
+    list.insertEnd = endInsertList;
+    
+    list.remove = removeList;
+    list.removeEnd = endRemoveList;
+    list.removeStart = beginningRemoveList;
+
+
+    list.show = showList;
+    list.close = closeList;
+
+    return list;
+}
