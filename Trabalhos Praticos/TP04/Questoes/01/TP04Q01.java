@@ -25,7 +25,7 @@ public class TP04Q01{
             while(sc.hasNextLine()){
                 line = sc.nextLine();
                 System.out.print(line + " ");
-                System.out.println(tree.search(line) ? "NAO" : "SIM");
+                System.out.println(tree.search(line) ? "SIM" : "NAOO");
             }
 
         }catch(Exception e){
