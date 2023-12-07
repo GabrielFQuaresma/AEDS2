@@ -181,6 +181,45 @@ public class Player {
         return tmp;
     }
 
+    public static Player searchByName(String filePath, String name) throws Exception {
+        Player tmp = new Player();
+        File file = new File(filePath);
+        if (!file.exists()) {
+            System.out.println("Deu excessao");
+            throw new Exception("Arquivo não existe");
+        }
+
+        Scanner sc = new Scanner(file);
+        sc.nextLine();
+        sc.useDelimiter(",");
+
+        int tmpId = sc.nextInt();
+        String tmpName = sc.next();
+
+        while (!tmpName.equals(name) && sc.hasNext()) {
+            sc.nextLine();
+            tmpId = sc.nextInt();
+            tmpName = sc.next();
+        }
+        
+        if (tmpName.equals(name)) {
+            String str = sc.nextLine();
+            String[] strings = isEmpty(str.split(",", -1));
+            
+            int height = Integer.parseInt(strings[1]);
+            int weight = Integer.parseInt(strings[2]);
+            String university = strings[3];
+            int birthYear = Integer.parseInt(strings[4]);
+            String birthCity = strings[5];
+            String birthState = strings[6];
+            
+            tmp = new Player(tmpId, name, height, weight, university, birthYear, birthCity, birthState);
+
+        }
+        sc.close();
+        return tmp;
+    }
+
     public static int strcmpr(Player player1, Player player2)
     {
         return player1.getName().compareTo(player2.getName());
