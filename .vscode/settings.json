@@ -1,0 +1,17 @@
+{
+    "files.associations": {
+        "functional": "c",
+        "stdio.h": "c",
+        "tp02q12": "c",
+        "TP02Q18.C": "cpp",
+        "array": "c",
+        "random": "c",
+        "stdlib.h": "c",
+        "string.h": "c",
+        "playerlist.h": "c",
+        "v03q07": "c",
+        "playerflexstack.h": "c",
+        "playercircularqueue.h": "c",
+        "flexlisthash.h": "c"
+    }
+}
